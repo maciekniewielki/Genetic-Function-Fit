@@ -1,5 +1,5 @@
 from Utils import MARKER, VAR, FUNCTIONS
-from matplotlib import pyplot as plt
+
 class Tree(object):
     def __init__(self):
         self.left = None
@@ -7,7 +7,7 @@ class Tree(object):
         self.data = None
     def createTree(self, code):
         """function creating a new branch"""
-        if(not code or code[0] == MARKER):
+        if not code or code[0] == MARKER:
             code.pop(0)
             return
         object = self;
@@ -17,8 +17,12 @@ class Tree(object):
         code.pop(0)
         object.left = Tree()
         object.left.createTree(code)
+        if not object.left.data:
+            object.left = None
         object.right = Tree()
         object.right.createTree(code)
+        if not object.right.data:
+            object.right = None
     def calculate(self, x):
         if (not self.left) and (not self.right):
             if self.data != VAR:
@@ -29,12 +33,3 @@ class Tree(object):
             return FUNCTIONS[self.data](self.left.calculate(x), self.right.calculate(x))
         else:
             return FUNCTIONS[self.data](self.left.calculate(x))
-drzefko = Tree()
-kod = ['sin', '+', 'x', '$', '$', '*', 'x', '$', '$', '4', '$', '$', '$']
-drzefko.createTree(kod)
-print(kod)
-y = []
-for ii in range(0,100):
-    y.append(drzefko.calculate(ii/100))
-plt.plot(y)
-plt.show()
