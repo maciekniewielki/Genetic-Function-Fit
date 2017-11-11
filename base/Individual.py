@@ -13,11 +13,11 @@ class Individual:
         raise AbstractMethodError
 
     @staticmethod
-    def mutate(individual):
-        """Mutate the given individual."""
+    def mutate(individual, probability):
+        """Mutate the given individual with the given probability."""
         raise AbstractMethodError
 
     @staticmethod
     def crossover(parent1, parent2):
-        """Perform crossover with given parents and return the child."""
+        """Perform crossover with given parents."""
         raise AbstractMethodError
