@@ -1,0 +1,17 @@
+﻿1) zrobić dziecko Individual takie żeby już pasowało do fita
+	losowy przedstawiciel populacji
+	to będzie w mierę trudne
+	musi mieć kod
+2) wymyślić kod
+	drzewka
+funckje:
+dwuargumentowe: +, -, *, :,
+jednoargumentowe: sin, exp, log(abs) - zawsze lewy branch
+max-poziomów - 5 -> max. elementów w drzewku 32
+kod genetyczny ze strony http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/
+funkcja obliczająca wartość - rekurencyjna z parserem
+
+dodawanie operatora - z wartościami
+
+
+przykład kodu: ['sin', '+', 'x', '$', '$', '*', 'x', '$', '$', '4', '$', '$', '$']
