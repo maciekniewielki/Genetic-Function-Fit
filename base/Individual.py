@@ -21,3 +21,8 @@ class Individual:
     def crossover(parent1, parent2):
         """Perform crossover with given parents."""
         raise AbstractMethodError
+
+    @staticmethod
+    def makecopy(individual):
+        """Return a copy of the individual."""
+        raise AbstractMethodError
