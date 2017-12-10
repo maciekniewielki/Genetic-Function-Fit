@@ -1,12 +1,18 @@
 from base import Individual
+from base import Tree
+from base import Utils
+
 AbstractMethodError = NotImplementedError("You must override this method")
 
 class Function(Individual):
     """Represents an individual in a population"""
+    tree = None
+    code = []
 
     def __init__(self):
         """Construct a random individual."""
-        raise AbstractMethodError
+        self.tree = Tree()
+        self.tree.createTree(self.code)
 
     @staticmethod
     def get_fitness(individual):
