@@ -1,6 +1,7 @@
 #from base import Individual
 from base.Tree import Tree
 from base import Utils
+import random
 from random import choice, randint, random
 #import matplotlib.pyplot as plt
 #from numpy import linspace
@@ -31,7 +32,22 @@ class Function():
     @staticmethod
     def crossover(parent1, parent2):
         """Perform crossover with given parents."""
-        raise AbstractMethodError
+
+        tree1 = parent1.tree
+        tree2 = parent2.tree
+
+        depth = random.randint(1, Utils.MAX_DEPTH)
+
+        chain1 = []
+        chain2 = []
+        chain1 = tree1.get_random_list(depth, chain1)
+        chain2 = tree2.get_random_list(depth, chain2)
+
+        exp1 = "parent1.tree.%s" % (".".join(chain1))
+        exp2 = "parent2.tree.%s" % (".".join(chain2))
+        # Worst code 2017
+        exec("%s, %s = %s, %s" % (exp1, exp2, exp2, exp1))
+
 
     @staticmethod
     def makecopy(individual):

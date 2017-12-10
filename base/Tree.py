@@ -1,7 +1,7 @@
 from Utils import MARKER, VAR, FUNCTIONS
 import numpy as np
 #import matplotlib.pyplot as plt
-
+import random
 
 class Tree(object):
     def __init__(self):
@@ -37,6 +37,25 @@ class Tree(object):
             return FUNCTIONS[self.data](self.left.calculate(x), self.right.calculate(x))
         else:
             return FUNCTIONS[self.data](self.left.calculate(x))
+
+    def get_random_list(self, depth, l):
+        if depth == 0 or (self.left is None and self.right is None):
+            return l
+        else:
+            if random.random() > 0.5:
+                if self.left:
+                    l.append("left")
+                    return self.left.get_random_list(depth-1, l)
+                else:
+                    l.append("right")
+                    return self.right.get_random_list(depth - 1, l)
+            else:
+                if self.right:
+                    l.append("right")
+                    return self.right.get_random_list(depth - 1, l)
+                else:
+                    l.append("left")
+                return self.left.get_random_list(depth - 1, l)
 
 #wykorzystanie drzefka
 """ 
