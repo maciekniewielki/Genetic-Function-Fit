@@ -1,5 +1,5 @@
 from Utils import MARKER, VAR, FUNCTIONS
-#import numpy as np
+import numpy as np
 #import matplotlib.pyplot as plt
 import random
 
@@ -16,7 +16,6 @@ class Tree(object):
             return
         object = self;
         object.data = code[0]
-        print(object.data)
 
         code.pop(0)
         object.left = Tree()
@@ -31,7 +30,7 @@ class Tree(object):
     def calculate(self, x):
         if (not self.left) and (not self.right):
             if self.data != VAR:
-                return float(self.data)
+                return float(self.data)*np.ones(np.size(x))
             else:
                 return x
         elif self.left and self.right:
