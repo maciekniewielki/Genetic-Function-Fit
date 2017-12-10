@@ -1,8 +1,9 @@
+from base import Individual
 AbstractMethodError = NotImplementedError("You must override this method")
 
-
-class Individual:
+class Function(Individual):
     """Represents an individual in a population"""
+
     def __init__(self):
         """Construct a random individual."""
         raise AbstractMethodError

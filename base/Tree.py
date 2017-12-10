@@ -1,10 +1,14 @@
 from Utils import MARKER, VAR, FUNCTIONS
+#import numpy as np
+#import matplotlib.pyplot as plt
+
 
 class Tree(object):
     def __init__(self):
         self.left = None
         self.right = None
         self.data = None
+
     def createTree(self, code):
         """function creating a new branch"""
         if not code or code[0] == MARKER:
@@ -23,6 +27,7 @@ class Tree(object):
         object.right.createTree(code)
         if not object.right.data:
             object.right = None
+
     def calculate(self, x):
         if (not self.left) and (not self.right):
             if self.data != VAR:
@@ -33,3 +38,16 @@ class Tree(object):
             return FUNCTIONS[self.data](self.left.calculate(x), self.right.calculate(x))
         else:
             return FUNCTIONS[self.data](self.left.calculate(x))
+
+#wykorzystanie drzefka
+""" 
+kod = "sin + x $ $ * x $ $ 4 $ $ $"
+lista = kod.split()
+print(lista)
+drzefko = Tree()
+drzefko.createTree(lista)
+x = np.linspace(0, 2*np.pi, 1000)
+y = drzefko.calculate(x)
+plt.plot(x, y)
+plt.show() 
+"""
