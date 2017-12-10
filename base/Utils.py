@@ -1,4 +1,4 @@
-from math import sin, exp, log
+from numpy import sin, exp, log
 
 MARKER = '$'
 VAR = 'x'
