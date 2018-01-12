@@ -71,12 +71,12 @@ class Function():
             direction = random.random()
             if direction < 0.5:
                 if curtree.left:
-                    curtree = individual.tree.left
+                    curtree = curtree.left
                 else:
                     break
             else:
                 if curtree.right:
-                    curtree = individual.tree.right
+                    curtree = curtree.right
                 else:
                     break
         if curtree.left and curtree.right:
@@ -98,7 +98,11 @@ class Function():
                     curtree.data = random.random()*(Utils.MAX_VAL - Utils.MIN_VAL) + Utils.MIN_VAL
             else:
                 curtree.data = Utils.VAR
-        individual.tree = curtree
+
+        x = linspace(1, 20, 1000)
+        y = individual.tree.calculate(x)
+        if isnan(y).any() or not isfinite(y).all():
+            individual = Function(individual.points)
 
 
 
@@ -161,9 +165,9 @@ class Function():
 
         return lis
 
-"""
+
 funkcja = Function()
-print(funkcja.code)
+print(funkcja.tree.traverse(funkcja.tree))
 
 x = linspace(1, 200, 1000)
 #print(x)
@@ -173,4 +177,5 @@ funkcja.mutate(funkcja)
 y2 = funkcja.tree.calculate(x)
 plt.plot(x, y2)
 #print(funkcja.code)
-plt.show()"""
+print(funkcja.tree.traverse(funkcja.tree))
+plt.show()

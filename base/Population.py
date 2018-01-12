@@ -4,10 +4,11 @@ import Utils
 
 class Population:
     """Represents a population of individuals."""
-    def __init__(self, size, IndividualClass):
+    def __init__(self, size, IndividualClass, points):
         """Construct a population with a given size."""
         self.size = size
         self.individuals = [IndividualClass() for _ in range(size)]
+        self.points = points
         self.crossover_prob = 0.7
         self.mutation_prob = 3e-3
         self.IndividualClass = IndividualClass
@@ -18,7 +19,7 @@ class Population:
         self.apply_crossover()
         self.apply_mutation()
         self.sort_by_fitness()
-        return self.IndividualClass.get_fitness(self.individuals[0])
+        return self.individuals[0]
 
     def apply_selection(self, selection_type="roulette"):
         """Apply the given selection operator for the current population."""

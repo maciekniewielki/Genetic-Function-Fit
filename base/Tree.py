@@ -20,11 +20,11 @@ class Tree(object):
         code.pop(0)
         object.left = Tree()
         object.left.createTree(code)
-        if not object.left.data:
+        if object.left.data is None:
             object.left = None
         object.right = Tree()
         object.right.createTree(code)
-        if not object.right.data:
+        if object.right.data is None:
             object.right = None
 
     def calculate(self, x):
