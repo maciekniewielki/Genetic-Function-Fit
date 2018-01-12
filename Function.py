@@ -12,16 +12,22 @@ AbstractMethodError = NotImplementedError("You must override this method")
 class Function():
     """Represents an individual in a population"""
 
-    def __init__(self):
+    def __init__(self, points):
         """Construct a random individual."""
         self.fitness = None
         self.changed = False
         self.tree = None
+        self.points = points
+        self.points_per_point = 20
         self.depth = 0
         self.code = self.createLevel()
         self.tree = Tree()
         self.tree.createTree(self.code[:])
-        x = linspace(1, 20, 1000)
+
+        n_points = len(points[0])
+        n_interpolation_points = (n_points - 1) * self.points_per_point + 1
+
+        x = linspace(min(points[0]), max(points[0]), n_interpolation_points)
         self.x = x
         self.y = self.tree.calculate(x)
         while isnan(self.y).any() or not isfinite(self.y).all():
@@ -33,11 +39,13 @@ class Function():
 
 
     @staticmethod
-    def get_fitness(individual, points):
+    def get_fitness(individual):
         """Return the fitness value for the given individual."""
 
         if individual.fitness and not individual.changed:
             return individual.fitness
+
+        points = individual.points
 
         def get_length(x, y):
             _sum = 0
@@ -46,11 +54,11 @@ class Function():
             return _sum
 
         optimal_length = get_length(points[0], points[1])
-        real_length = get_length(individual.x[:-100], individual.y[:-100])
+        real_length = get_length(individual.x, individual.y)
 
         _sum = 0
         for ii in range(len(points[1])):
-            _sum += abs(points[1][ii] - individual.y[100*ii])
+            _sum += abs(points[1][ii] - individual.y[individual.points_per_point*ii])
 
         # if optimal_length > real_length:
         #     print("Optimal: %f, real: %f" % (optimal_length, real_length))
@@ -98,7 +106,6 @@ class Function():
                     curtree.data = random.random()*(Utils.MAX_VAL - Utils.MIN_VAL) + Utils.MIN_VAL
             else:
                 curtree.data = Utils.VAR
-        individual.tree = curtree
 
 
 
