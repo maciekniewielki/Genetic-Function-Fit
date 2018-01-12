@@ -13,7 +13,7 @@ class Individual:
         raise AbstractMethodError
 
     @staticmethod
-    def mutate(individual, probability):
+    def mutate(individual):
         """Mutate the given individual with the given probability."""
         raise AbstractMethodError
 
