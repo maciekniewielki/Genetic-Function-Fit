@@ -56,7 +56,10 @@ class Tree(object):
                 else:
                     l.append("left")
                 return self.left.get_random_list(depth - 1, l)
-
+    def delete_tree(self):
+        self.left = None
+        self.right = None
+        self.data = None
 #wykorzystanie drzefka
 """ 
 kod = "sin + x $ $ * x $ $ 4 $ $ $"

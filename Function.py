@@ -2,9 +2,8 @@
 from base.Tree import Tree
 from base import Utils
 import random
-from random import choice, randint, random
-#import matplotlib.pyplot as plt
-#from numpy import linspace
+import matplotlib.pyplot as plt
+from numpy import linspace, isnan, isfinite
 
 AbstractMethodError = NotImplementedError("You must override this method")
 
@@ -18,6 +17,15 @@ class Function():
         self.code = self.createLevel()
         self.tree = Tree()
         self.tree.createTree(self.code[:])
+        x = linspace(1, 20, 1000)
+        self.y = self.tree.calculate(x)
+        while isnan(self.y).any() or not isfinite(self.y).all():
+            self.code.clear()
+            self.code = self.createLevel()
+            self.tree.delete_tree()
+            self.tree.createTree(self.code[:])
+            self.y = self.tree.calculate(x)
+
 
     @staticmethod
     def get_fitness(individual):
@@ -25,9 +33,44 @@ class Function():
         raise AbstractMethodError
 
     @staticmethod
-    def mutate(individual, probability):
+    def mutate(individual):
         """Mutate the given individual with the given probability."""
-        raise AbstractMethodError
+        dep = random.randint(1, Utils.MAX_DEPTH)
+        curtree = individual.tree
+        for i in range(0, dep):
+            direction = random.random()
+            if direction < 0.5:
+                if curtree.left:
+                    curtree = individual.tree.left
+                else:
+                    break
+            else:
+                if curtree.right:
+                    curtree = individual.tree.right
+                else:
+                    break
+        if curtree.left and curtree.right:
+            list = Utils.ARG_2
+            list.remove(curtree.data)
+            curtree.data = random.choice(list)
+
+        elif curtree.left:
+            list = Utils.ARG_1
+            list.remove(curtree.data)
+            curtree.data = random.choice(list)
+
+        else:
+            varval = random.random()
+            if curtree.data == Utils.VAR or varval < 0.5:
+                if Utils.INT:
+                    curtree.data = random.randint(Utils.MIN_VAL, Utils.MAX_VAL)
+                else:
+                    curtree.data = random.random()*(Utils.MAX_VAL - Utils.MIN_VAL) + Utils.MIN_VAL
+            else:
+                curtree.data = Utils.VAR
+        individual.tree = curtree
+
+
 
     @staticmethod
     def crossover(parent1, parent2):
@@ -56,9 +99,9 @@ class Function():
 
     def createLevel(self):
         if self.depth < Utils.MAX_DEPTH:
-            lis = [choice(Utils.OPERATORS), Utils.MARKER, Utils.MARKER]
+            lis = [random.choice(Utils.OPERATORS), Utils.MARKER, Utils.MARKER]
         else:
-            lis = [choice(Utils.ARG_0), Utils.MARKER, Utils.MARKER]
+            lis = [random.choice(Utils.ARG_0), Utils.MARKER, Utils.MARKER]
 
         if lis[0] in Utils.ARG_1:
             self.depth += 1
@@ -82,19 +125,22 @@ class Function():
         elif lis[0] == Utils.VAL:
             lis.pop(0)
             if Utils.INT:
-                lis.insert(0, randint(Utils.MIN_VAL, Utils.MAX_VAL))
+                lis.insert(0, random.randint(Utils.MIN_VAL, Utils.MAX_VAL))
             else:
-                lis.insert(0, random()*(Utils.MAX_VAL - Utils.MIN_VAL) + Utils.MIN_VAL)
+                lis.insert(0, random.random()*(Utils.MAX_VAL - Utils.MIN_VAL) + Utils.MIN_VAL)
 
         return lis
 
-"""
+
 funkcja = Function()
 print(funkcja.code)
-x = linspace(1, 20, 1000)
+
+x = linspace(1, 200, 1000)
 #print(x)
 y = funkcja.tree.calculate(x)
-#print(y)
 plt.plot(x, y)
+funkcja.mutate(funkcja)
+y2 = funkcja.tree.calculate(x)
+plt.plot(x, y2)
+#print(funkcja.code)
 plt.show()
-"""
