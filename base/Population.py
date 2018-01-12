@@ -4,11 +4,10 @@ import Utils
 
 class Population:
     """Represents a population of individuals."""
-    def __init__(self, size, IndividualClass, points):
+    def __init__(self, size, IndividualClass, *args):
         """Construct a population with a given size."""
         self.size = size
-        self.individuals = [IndividualClass() for _ in range(size)]
-        self.points = points
+        self.individuals = [IndividualClass(*args) for _ in range(size)]
         self.crossover_prob = 0.7
         self.mutation_prob = 3e-3
         self.IndividualClass = IndividualClass
