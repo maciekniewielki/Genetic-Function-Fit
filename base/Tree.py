@@ -56,10 +56,22 @@ class Tree(object):
                 else:
                     l.append("left")
                 return self.left.get_random_list(depth - 1, l)
+
     def delete_tree(self):
         self.left = None
         self.right = None
         self.data = None
+
+    @staticmethod
+    def traverse(node):
+        rep = []
+        if node is not None:
+            rep += [node.data]
+            rep += Tree.traverse(node.left)
+            rep += Tree.traverse(node.right)
+        else:
+            rep += "$"
+        return rep
 #wykorzystanie drzefka
 """ 
 kod = "sin + x $ $ * x $ $ 4 $ $ $"
