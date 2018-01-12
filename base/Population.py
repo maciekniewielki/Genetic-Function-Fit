@@ -18,7 +18,7 @@ class Population:
         self.apply_crossover()
         self.apply_mutation()
         self.sort_by_fitness()
-        return self.IndividualClass.get_fitness(self.individuals[0])
+        return self.individuals[0]
 
     def apply_selection(self, selection_type="roulette"):
         """Apply the given selection operator for the current population."""
