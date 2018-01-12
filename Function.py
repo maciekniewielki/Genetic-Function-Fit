@@ -3,6 +3,7 @@ from base.Tree import Tree
 from base import Utils
 import random
 import matplotlib.pyplot as plt
+import  numpy as np
 from numpy import linspace, isnan, isfinite
 from math import sqrt
 
@@ -27,16 +28,18 @@ class Function():
         n_points = len(points[0])
         n_interpolation_points = (n_points - 1) * self.points_per_point + 1
 
-        x = linspace(min(points[0]), max(points[0]), n_interpolation_points)
-        self.x = x
-        self.y = self.tree.calculate(x)
+        self.x = linspace(min(points[0]), max(points[0]), n_interpolation_points)
+        self.make_living()
+
+    def make_living(self):
+        self.y = self.tree.calculate(self.x)
         while isnan(self.y).any() or not isfinite(self.y).all():
             self.code.clear()
+            self.depth = 0
             self.code = self.createLevel()
-            self.tree.delete_tree()
+            # self.tree.delete_tree()
             self.tree.createTree(self.code[:])
-            self.y = self.tree.calculate(x)
-
+            self.y = self.tree.calculate(self.x)
 
     @staticmethod
     def get_fitness(individual):
@@ -107,11 +110,7 @@ class Function():
             else:
                 curtree.data = Utils.VAR
 
-        x = linspace(1, 20, 1000)
-        y = individual.tree.calculate(x)
-        if isnan(y).any() or not isfinite(y).all():
-            individual = Function(individual.points)
-
+        individual.make_living()
 
 
     @staticmethod
@@ -173,10 +172,11 @@ class Function():
 
         return lis
 
-
-funkcja = Function()
+'''
+x = np.arange(1, 11)
+points = np.log(x)
+funkcja = Function([x, points])
 print(funkcja.tree.traverse(funkcja.tree))
-
 x = linspace(1, 200, 1000)
 #print(x)
 y = funkcja.tree.calculate(x)
@@ -187,3 +187,4 @@ plt.plot(x, y2)
 #print(funkcja.code)
 print(funkcja.tree.traverse(funkcja.tree))
 plt.show()
+'''
