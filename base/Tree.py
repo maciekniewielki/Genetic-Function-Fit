@@ -14,7 +14,7 @@ class Tree(object):
         if not code or code[0] == MARKER:
             code.pop(0)
             return
-        object = self;
+        object = self
         object.data = code[0]
 
         code.pop(0)

@@ -13,7 +13,7 @@ maximum = 0
 plots = []
 max_difference = len(points[1])
 print("Max fitness = %f" % max_difference)
-for i in range(0, 1600):
+for i in range(0, 100):
     # print("=" * 10 + str(i) + "=" * 10)
     # for x in population.individuals:
     #     print(x.code)

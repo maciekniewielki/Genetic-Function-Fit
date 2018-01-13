@@ -8,7 +8,7 @@ from numpy import linspace, isnan, isfinite
 from math import sqrt
 
 AbstractMethodError = NotImplementedError("You must override this method")
-
+old_settings = np.seterr(all='ignore')
 
 class Function():
     """Represents an individual in a population"""
@@ -90,7 +90,9 @@ class Function():
         # print(individual.code)
         dep = random.randint(1, Utils.MAX_DEPTH)
         curtree = individual.tree
+        index = 0
         for i in range(0, dep):
+            index = i
             direction = random.random()
             if direction < 0.5:
                 if curtree.left:
@@ -113,17 +115,30 @@ class Function():
             curtree.data = random.choice(list)
 
         else:
-            varval = random.random()
-            if varval < 0.5:
-                if Utils.INT:
-                    curtree.data = random.randint(Utils.MIN_VAL, Utils.MAX_VAL)
-                else:
-                    curtree.data = random.random()*(Utils.MAX_VAL - Utils.MIN_VAL) + Utils.MIN_VAL
+            if index < (Utils.MAX_DEPTH - 1) and random.random() < 0.8:
+                list = Utils.ARG_1[:]
+                curtree.data = random.choice(list)
+                curtree.left = Tree()
+                curtree.right = None
+                curtree.left.data = Utils.VAR
+                curtree.left.left = None
+                curtree.left.right = None
             else:
-                curtree.data = Utils.VAR
+                varval = random.random()
+                if varval < 0.5:
+                    if Utils.INT:
+                        curtree.data = random.randint(Utils.MIN_VAL, Utils.MAX_VAL)
+                    else:
+                        curtree.data = random.random()*(Utils.MAX_VAL - Utils.MIN_VAL) + Utils.MIN_VAL
+                else:
+                    curtree.data = Utils.VAR
+        try:
+            code = Tree.traverse(individual.tree)
+            individual.code = Tree.traverse(individual.tree)
 
-        individual.code = Tree.traverse(individual.tree)
-        individual.make_living()
+            individual.make_living()
+        except:
+            print(individual.code)
         individual.fitness = None
         # print("Po:")
         # print(individual.code)
