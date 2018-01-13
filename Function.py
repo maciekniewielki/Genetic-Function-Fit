@@ -16,7 +16,7 @@ class Function():
     def __init__(self, points):
         """Construct a random individual."""
         self.fitness = None
-        self.changed = False
+        self.max_fitness = None
         self.tree = None
         self.points = points
         self.points_per_point = 20
@@ -40,12 +40,14 @@ class Function():
             # self.tree.delete_tree()
             self.tree.createTree(self.code[:])
             self.y = self.tree.calculate(self.x)
+            self.fitness = None
+
 
     @staticmethod
     def get_fitness(individual):
         """Return the fitness value for the given individual."""
 
-        if individual.fitness and not individual.changed:
+        if individual.fitness:
             return individual.fitness
 
         points = individual.points
@@ -60,22 +62,32 @@ class Function():
         real_length = get_length(individual.x, individual.y)
 
         _sum = 0
+        height = max(points[1]) - min(points[1])
         for ii in range(len(points[1])):
-            _sum += abs(points[1][ii] - individual.y[individual.points_per_point*ii])
+            diff = abs(points[1][ii] - individual.y[individual.points_per_point*ii])
+            diff_norm = (diff / height)**0.5
+            if diff_norm > 1:
+                diff_norm = 1
+            _sum += diff_norm
 
         # if optimal_length > real_length:
         #     print("Optimal: %f, real: %f" % (optimal_length, real_length))
-        max_difference = (max(points[1]) - min(points[1])) * len(points[1])
-        individual.fitness = (max_difference - _sum) * sqrt(min(optimal_length/real_length, 1))
+
+        max_difference = len(points[1])
+        if isnan(_sum) or not isfinite(_sum):
+            individual.fitness = 0
+        else:
+            individual.fitness = (max_difference - _sum) * sqrt(min(optimal_length/real_length, 1))
         if individual.fitness < 0:
             individual.fitness = 0
-        individual.changed = False
 
         return individual.fitness
 
     @staticmethod
     def mutate(individual):
         """Mutate the given individual with the given probability."""
+        # print("Mutuuuuuuuuuuuuuuuuuuuuuje. Przed:")
+        # print(individual.code)
         dep = random.randint(1, Utils.MAX_DEPTH)
         curtree = individual.tree
         for i in range(0, dep):
@@ -91,18 +103,18 @@ class Function():
                 else:
                     break
         if curtree.left and curtree.right:
-            list = Utils.ARG_2
+            list = Utils.ARG_2[:]
             list.remove(curtree.data)
             curtree.data = random.choice(list)
 
         elif curtree.left:
-            list = Utils.ARG_1
+            list = Utils.ARG_1[:]
             list.remove(curtree.data)
             curtree.data = random.choice(list)
 
         else:
             varval = random.random()
-            if curtree.data == Utils.VAR or varval < 0.5:
+            if varval < 0.5:
                 if Utils.INT:
                     curtree.data = random.randint(Utils.MIN_VAL, Utils.MAX_VAL)
                 else:
@@ -110,7 +122,11 @@ class Function():
             else:
                 curtree.data = Utils.VAR
 
+        individual.code = Tree.traverse(individual.tree)
         individual.make_living()
+        individual.fitness = None
+        # print("Po:")
+        # print(individual.code)
 
 
     @staticmethod
@@ -132,6 +148,9 @@ class Function():
         # Worst code 2017
         exec("%s, %s = %s, %s" % (exp1, exp2, exp2, exp1))
 
+        parent1.fitness = None
+        parent2.fitness = None
+
 
     @staticmethod
     def makecopy(individual):
@@ -140,7 +159,7 @@ class Function():
         new.tree.delete_tree()
         new.tree = individual.tree
         new.code.clear()
-        new.code.append(individual.code)
+        new.code = individual.code[:]
         new.depth = individual.depth
         new.fitness = Function.get_fitness(individual)
         new.x = individual.x

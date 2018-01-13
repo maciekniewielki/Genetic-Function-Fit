@@ -9,7 +9,7 @@ class Population:
         self.size = size
         self.individuals = [IndividualClass(*args) for _ in range(size)]
         self.crossover_prob = 0.7
-        self.mutation_prob = 3e-3
+        self.mutation_prob = 60.999
         self.IndividualClass = IndividualClass
 
     def advance_step(self):
@@ -36,6 +36,7 @@ class Population:
             if random() > self.crossover_prob or parent1 == parent2:
                 continue
             self.IndividualClass.crossover(parent1, parent2)
+
 
     def apply_mutation(self):
         """Apply the mutation operator."""
