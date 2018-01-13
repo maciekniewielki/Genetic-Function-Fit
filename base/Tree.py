@@ -1,4 +1,4 @@
-from Utils import MARKER, VAR, FUNCTIONS
+from Utils import MARKER, VAR, FUNCTIONS, ARG_0, ARG_1, ARG_2
 import numpy as np
 #import matplotlib.pyplot as plt
 import random
@@ -72,15 +72,42 @@ class Tree(object):
         else:
             rep += "$"
         return rep
-#wykorzystanie drzefka
-""" 
-kod = "sin + x $ $ * x $ $ 4 $ $ $"
-lista = kod.split()
-print(lista)
-drzefko = Tree()
-drzefko.createTree(lista)
-x = np.linspace(0, 2*np.pi, 1000)
-y = drzefko.calculate(x)
-plt.plot(x, y)
-plt.show() 
-"""
+
+    @staticmethod
+    def is_valid(node):
+        rep = []
+
+        if node is not None:
+
+            if node.left and node.right:
+                if node.data in ARG_2:
+                    rep += [True]
+                else:
+                    rep += [False]
+            elif node.left and not node.right:
+                if node.data in ARG_1:
+                    rep += [True]
+                else:
+                    rep += [False]
+
+            # elif not node.left and node.right:
+            #         rep += [False]
+            elif (not node.left) and (not node.right):
+                if node.data == VAR:
+                    rep += [True]
+                else:
+                    try:
+                        float(node.data)
+                        rep += [True]
+                    except:
+                        rep += [False]
+            # else:
+            #     rep += [False]
+            # if rep[-1] == False:
+            #     print("Validation failed with left = %s, right = %s, data = %s" % (node.left, node.right, node.data))
+
+            rep += Tree.is_valid(node.left)
+            rep += Tree.is_valid(node.right)
+
+        return rep
+

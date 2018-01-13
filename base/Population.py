@@ -8,8 +8,8 @@ class Population:
         """Construct a population with a given size."""
         self.size = size
         self.individuals = [IndividualClass(*args) for _ in range(size)]
-        self.crossover_prob = 0.7
-        self.mutation_prob = 60.999
+        self.crossover_prob = 0.8
+        self.mutation_prob = 0.5
         self.IndividualClass = IndividualClass
 
     def advance_step(self):

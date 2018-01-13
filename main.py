@@ -24,6 +24,7 @@ for i in range(0, 100):
     # print(fitness)
     if fitness > maximum:
         print("Better at %d: fitness = %f" % (i, fitness))
+        print(best.code)
         plots.append(str(i))
         maximum = fitness
         plt.plot(best.x, best.y)

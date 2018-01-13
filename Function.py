@@ -86,8 +86,6 @@ class Function():
     @staticmethod
     def mutate(individual):
         """Mutate the given individual with the given probability."""
-        # print("Mutuuuuuuuuuuuuuuuuuuuuuje. Przed:")
-        # print(individual.code)
         dep = random.randint(1, Utils.MAX_DEPTH)
         curtree = individual.tree
         index = 0
@@ -117,7 +115,9 @@ class Function():
         else:
             if index < (Utils.MAX_DEPTH - 1) and random.random() < 0.8:
                 list = Utils.ARG_1[:]
-                curtree.data = random.choice(list)
+                data = random.choice(list)
+                # print("Replacing %s with %s" % (curtree.data, data))
+                curtree.data = data
                 curtree.left = Tree()
                 curtree.right = None
                 curtree.left.data = Utils.VAR
@@ -132,16 +132,11 @@ class Function():
                         curtree.data = random.random()*(Utils.MAX_VAL - Utils.MIN_VAL) + Utils.MIN_VAL
                 else:
                     curtree.data = Utils.VAR
-        try:
-            code = Tree.traverse(individual.tree)
-            individual.code = Tree.traverse(individual.tree)
 
-            individual.make_living()
-        except:
-            print(individual.code)
+        individual.code = Tree.traverse(individual.tree)
+
+        individual.make_living()
         individual.fitness = None
-        # print("Po:")
-        # print(individual.code)
 
 
     @staticmethod
@@ -160,8 +155,17 @@ class Function():
 
         exp1 = "parent1.%s" % (".".join(chain1))
         exp2 = "parent2.%s" % (".".join(chain2))
+
+        exec("code1 = Tree.traverse(%s)" % exp1)
+        exec("code2 = Tree.traverse(%s)" % exp2)
+
+        exec("%s.createTree(code2)" % exp1)
+        exec("%s.createTree(code1)" % exp2)
+
         # Worst code 2017
-        exec("%s, %s = %s, %s" % (exp1, exp2, exp2, exp1))
+        # command = "%s, %s = %s, %s" % (exp1, exp2, exp2, exp1)
+        # print(command)
+        # exec(command)
 
         parent1.fitness = None
         parent2.fitness = None
@@ -215,20 +219,3 @@ class Function():
                 lis.insert(0, random.random()*(Utils.MAX_VAL - Utils.MIN_VAL) + Utils.MIN_VAL)
 
         return lis
-
-'''
-x = np.arange(1, 11)
-points = np.log(x)
-funkcja = Function([x, points])
-print(funkcja.tree.traverse(funkcja.tree))
-x = linspace(1, 200, 1000)
-#print(x)
-y = funkcja.tree.calculate(x)
-plt.plot(x, y)
-funkcja.mutate(funkcja)
-y2 = funkcja.tree.calculate(x)
-plt.plot(x, y2)
-#print(funkcja.code)
-print(funkcja.tree.traverse(funkcja.tree))
-plt.show()
-'''
