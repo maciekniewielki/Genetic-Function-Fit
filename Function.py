@@ -136,7 +136,17 @@ class Function():
     @staticmethod
     def makecopy(individual):
         """Return a copy of the individual."""
-        raise AbstractMethodError
+        new = Function(individual.points)
+        new.tree.delete_tree()
+        new.tree = individual.tree
+        new.code.clear()
+        new.code.append(individual.code)
+        new.depth = individual.depth
+        new.fitness = individual.get_fitness()
+        new.x = individual.x
+        new.points_per_point = individual.points_per_point
+        
+        return new
 
     def createLevel(self):
         if self.depth < Utils.MAX_DEPTH:
