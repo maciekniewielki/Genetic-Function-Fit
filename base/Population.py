@@ -40,7 +40,7 @@ class Population:
     def apply_mutation(self):
         """Apply the mutation operator."""
         for ii in range(self.size):
-            if random.random() < self.mutation_prob:
+            if random() < self.mutation_prob:
                 self.IndividualClass.mutate(self.individuals[ii])
 
     def _tournament(self):

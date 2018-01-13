@@ -124,11 +124,11 @@ class Function():
 
         chain1 = []
         chain2 = []
-        chain1 = tree1.get_random_list(depth, chain1)
-        chain2 = tree2.get_random_list(depth, chain2)
+        chain1 = ["tree"] + tree1.get_random_list(depth, chain1)
+        chain2 = ["tree"] + tree2.get_random_list(depth, chain2)
 
-        exp1 = "parent1.tree.%s" % (".".join(chain1))
-        exp2 = "parent2.tree.%s" % (".".join(chain2))
+        exp1 = "parent1.%s" % (".".join(chain1))
+        exp2 = "parent2.%s" % (".".join(chain2))
         # Worst code 2017
         exec("%s, %s = %s, %s" % (exp1, exp2, exp2, exp1))
 
@@ -142,7 +142,7 @@ class Function():
         new.code.clear()
         new.code.append(individual.code)
         new.depth = individual.depth
-        new.fitness = individual.get_fitness()
+        new.fitness = Function.get_fitness(individual)
         new.x = individual.x
         new.points_per_point = individual.points_per_point
         
