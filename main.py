@@ -1,16 +1,15 @@
-import base.Population
-import Function
+from base.Population import Population
+from Function import Function
 import numpy as np
 import matplotlib.pyplot as plt
 
-x1 = np.arange(1, 11)
-points = np.log(x)
-population = base.Population(100, Function, [x1, points])
+x = np.arange(1, 11)
+points = np.array([x, x])
+points[1] = np.log(x)
+population = Population(100, Function, points)
+plt.plot(points[0], points[1], 'b*')
 
 for i in range(0, 10):
     best = population.advance_step()
-    x = np.linspace(1, 20, 1000)
-    y = best.tree.calculate(x)
-    plt.plot(x1, points, 'b*')
-    plt.plot(x, y)
+    plt.plot(best.x, best.y)
 plt.show()
